@@ -1,0 +1,107 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.okit</groupId>
+  <artifactId>rxjava</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>rxjava</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
+    <repositories>
+      <repository>
+   		<id>mvnrepository</id>
+	    <name>mvnrepository</name>
+	    <url>https://mvnrepository.com</url>
+    </repository>
+	<repository>
+		<id>central</id>
+		<url>http://repo1.maven.org/maven2/</url>
+	</repository>
+	<repository>
+		<id>boxfuse-repo</id>
+		<url>http://files.boxfuse.com</url>
+	</repository>  
+    <repository>
+	    <id>jcenter</id>
+	    <name>bintray-plugins</name>
+	    <url>http://jcenter.bintray.com</url>
+    </repository>
+    <repository>
+         <id>jitpack.io</id>
+         <url>https://jitpack.io</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+    	<groupId>com.squareup.retrofit2</groupId>
+    	<artifactId>retrofit</artifactId>
+    	<version>2.4.0</version>
+    </dependency>
+    <dependency>
+    	<groupId>com.squareup.retrofit2</groupId>
+    	<artifactId>adapter-rxjava2</artifactId>
+    	<version>2.4.0</version>
+    </dependency>
+    <dependency>
+    	<groupId>com.squareup.retrofit2</groupId>
+    	<artifactId>converter-gson</artifactId>
+    	<version>2.4.0</version>
+    </dependency>
+    <dependency>
+    	<groupId>com.squareup.okhttp3</groupId>
+    	<artifactId>okhttp</artifactId>
+    	<version>3.10.0</version>
+    </dependency>
+    <dependency>
+    	<groupId>io.reactivex.rxjava2</groupId>
+    	<artifactId>rxjava</artifactId>
+    	<version>2.1.14</version>
+    </dependency>
+    <dependency>
+    	<groupId>com.google.code.gson</groupId>
+    	<artifactId>gson</artifactId>
+    	<version>2.6.2</version>
+    </dependency>
+    <dependency>
+    	<groupId>com.google.zxing</groupId>
+    	<artifactId>core</artifactId>
+    	<version>3.3.3</version>
+    </dependency>
+    <dependency>
+    	<groupId>com.squareup.okhttp3</groupId>
+    	<artifactId>logging-interceptor</artifactId>
+    	<version>3.7.0</version>
+    </dependency>
+    <dependency>
+        <groupId>com.google.zxing</groupId>
+        <artifactId>core</artifactId>
+        <version>3.3.0</version>
+    </dependency>
+    <dependency>
+        <groupId>com.google.zxing</groupId>
+        <artifactId>javase</artifactId>
+        <version>3.3.0</version>
+    </dependency>
+    
+<!--     <dependency>
+	    <groupId>com.github.diederv</groupId>
+	    <artifactId>ok_tx_model</artifactId>
+	    <version>master</version>
+	</dependency> -->
+	
+  </dependencies>
+</project>
