@@ -46,7 +46,7 @@ public class OkServiceFactory {
         return new OkServiceImpl(OkServiceFactory.instance);
     }
     
-    private static class OkServiceImpl implements OkService {
+    public static class OkServiceImpl implements OkService {
     	
     	private final OkServiceFix okService;
     	
@@ -55,15 +55,16 @@ public class OkServiceFactory {
     	}
 
 		public Observable<Transaction> initiateTransactionRx(TransactionInitiation transactionInitiation) {
-			if (transactionInitiation.getLineItems().size() == 1) {
-				return okService.initiateSingleLineItemTransactionRx(transactionInitiation).map(new Function<SingleLineItemTransaction, Transaction>() {					
-					public Transaction apply(SingleLineItemTransaction slitx) throws Exception {						
-						return slitx.convert();					
-					}
-				});
-			} else {
-				return okService.initiateTransactionRx(transactionInitiation);
-			}
+//			if (transactionInitiation.getLineItems().size() == 1) {
+//				return okService.initiateSingleLineItemTransactionRx(transactionInitiation).map(new Function<SingleLineItemTransaction, Transaction>() {					
+//					public Transaction apply(SingleLineItemTransaction slitx) throws Exception {						
+//						return slitx.convert();					
+//					}
+//				});
+//			} else {
+//				return okService.initiateTransactionRx(transactionInitiation);
+//			}
+			return okService.initiateTransactionRx(transactionInitiation).onExceptionResumeNext(okService.initiateSingleLineItemTransactionRx(transactionInitiation));
 		}
 
 		public Observable<Transaction> checkTransactionRx(String guid) {
