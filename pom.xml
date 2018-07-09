@@ -96,12 +96,11 @@
         <artifactId>javase</artifactId>
         <version>3.3.0</version>
     </dependency>
-    
-<!--     <dependency>
+    <dependency>
 	    <groupId>com.github.diederv</groupId>
 	    <artifactId>ok_tx_model</artifactId>
-	    <version>master</version>
-	</dependency> -->
+	    <version>0.0.1</version>
+	</dependency>
 	
   </dependencies>
 </project>
