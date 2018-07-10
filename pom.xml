@@ -4,7 +4,7 @@
 
   <groupId>com.okit</groupId>
   <artifactId>rxjava</artifactId>
-  <version>0.0.10</version>
+  <version>0.0.11</version>
   <packaging>jar</packaging>
 
   <name>rxjava</name>
@@ -12,6 +12,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
   
     <repositories>
