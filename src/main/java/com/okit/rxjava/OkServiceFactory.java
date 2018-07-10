@@ -1,23 +1,22 @@
 package com.okit.rxjava;
 
-import com.okit.transaction.SingleLineItemTransaction;
+
+import java.text.DateFormat;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.okit.transaction.Transaction;
-import com.okit.transaction.TransactionInitiation;
-
-import io.reactivex.Observable;
-
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import io.reactivex.functions.Function;
-//import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-//import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+
 
 public class OkServiceFactory {
 
-    private static OkServiceFix instance;
+    private static OkService instance;
 
     public static OkService getInstance(String baseUrl, String username) {
         if (OkServiceFactory.instance == null) {
@@ -32,46 +31,28 @@ public class OkServiceFactory {
                     .addInterceptor(authInterceptor)
                     .addInterceptor(loggingInterceptor)
                     .build();
-
-            //https://futurestud.io/tutorials/retrofit-how-to-integrate-xml-converter
+                        
+            Gson gson = new GsonBuilder()
+            	     .registerTypeAdapter(Transaction.class, new TransactionTypeAdapter())            	     
+            	     .enableComplexMapKeySerialization()
+            	     .serializeNulls()
+            	     .setDateFormat(DateFormat.LONG)
+            	     .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
+            	     .setPrettyPrinting()
+            	     .setVersion(1.0)
+            	     .create();
+            
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(baseUrl)
                     .client(okHttpclient)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build();
 
-            OkServiceFactory.instance = retrofit.create(OkServiceFix.class);
+            OkServiceFactory.instance = retrofit.create(OkService.class);
         }
-        return new OkServiceImpl(OkServiceFactory.instance);
-    }
-    
-    public static class OkServiceImpl implements OkService {
-    	
-    	private final OkServiceFix okService;
-    	
-    	public OkServiceImpl(OkServiceFix okService) {
-    		this.okService = okService;
-    	}
+        return OkServiceFactory.instance;
+    }   
 
-		public Observable<Transaction> initiateTransactionRx(TransactionInitiation transactionInitiation) {
-//			if (transactionInitiation.getLineItems().size() == 1) {
-//				return okService.initiateSingleLineItemTransactionRx(transactionInitiation).map(new Function<SingleLineItemTransaction, Transaction>() {					
-//					public Transaction apply(SingleLineItemTransaction slitx) throws Exception {						
-//						return slitx.convert();					
-//					}
-//				});
-//			} else {
-//				return okService.initiateTransactionRx(transactionInitiation);
-//			}
-			return okService.initiateTransactionRx(transactionInitiation).onExceptionResumeNext(okService.initiateSingleLineItemTransactionRx(transactionInitiation));
-		}
-
-		public Observable<Transaction> checkTransactionRx(String guid) {
-			// TODO Auto-generated method stub
-			return okService.checkTransactionRx(guid).onExceptionResumeNext(okService.checkSingleLineItemTransactionRx(guid));
-		}
-    	
-    }
 
 }

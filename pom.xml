@@ -4,7 +4,7 @@
 
   <groupId>com.okit</groupId>
   <artifactId>rxjava</artifactId>
-  <version>0.0.6</version>
+  <version>0.0.7</version>
   <packaging>jar</packaging>
 
   <name>rxjava</name>
@@ -36,6 +36,10 @@
     <repository>
          <id>jitpack.io</id>
          <url>https://jitpack.io</url>
+    </repository>
+    <repository>
+         <id>sonatype.org</id>
+         <url>https://oss.sonatype.org</url>
     </repository>
   </repositories>
 
@@ -96,10 +100,23 @@
         <artifactId>javase</artifactId>
         <version>3.3.0</version>
     </dependency>
-    <dependency>
+    
+	<dependency>
 	    <groupId>com.github.diederv</groupId>
 	    <artifactId>ok_tx_model</artifactId>
-	    <version>0.0.3</version>
+	    <version>0.0.5</version>
+	</dependency>
+		
+ 	<dependency>
+  		<groupId>com.squareup.retrofit2</groupId>
+  		<artifactId>converter-jaxb</artifactId>
+  		<version>2.4.0</version>
+	</dependency>
+	
+ 	<dependency>
+  		<groupId>com.squareup.retrofit2</groupId>
+  		<artifactId>converter-moshi</artifactId>
+  		<version>2.4.0</version>
 	</dependency>
 	
   </dependencies>
