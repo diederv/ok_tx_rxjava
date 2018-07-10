@@ -41,7 +41,7 @@ public class TransactionTypeAdapter extends TypeAdapter<Transaction> {
 	      				}
 	      				in.endArray();
 	      			}
-	      			List<LineItem> l = new ArrayList<>();		      		
+	      			List<LineItem> l = new ArrayList<LineItem>();		      		
 	      			tx.setLineItems(l);
 	      			break;
 	      		case "attributes":			      			
@@ -126,7 +126,7 @@ public class TransactionTypeAdapter extends TypeAdapter<Transaction> {
 			Attribute attr = new Attribute(key, label, required, type);
 			List<Attribute> attributes = tx.getAttributes();
 			if (attributes == null) {
-				attributes = new ArrayList<>();
+				attributes = new ArrayList<Attribute>();
 			}
 			attributes.add(attr);
 			tx.setAttributes(attributes);
@@ -176,7 +176,7 @@ public class TransactionTypeAdapter extends TypeAdapter<Transaction> {
 		in.endObject();
 		List<LineItem> lineItems = tx.getLineItems();
 		if (lineItems == null) {
-			lineItems = new ArrayList<>();
+			lineItems = new ArrayList<LineItem>();
 		}
 		lineItems.add(li);
 		tx.setLineItems(lineItems);
