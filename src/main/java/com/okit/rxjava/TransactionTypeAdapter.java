@@ -35,7 +35,6 @@ public class TransactionTypeAdapter extends TypeAdapter<Transaction> {
 	      				parseLineItem(in, tx);				      			
 	      			} else if (in.peek().name().equals(BEGIN_ARRAY)) {
 	      				in.beginArray();
-	      				parseLineItem(in, tx);
 	      				while(in.hasNext()) {
 	      					parseLineItem(in, tx);
 	      				}
