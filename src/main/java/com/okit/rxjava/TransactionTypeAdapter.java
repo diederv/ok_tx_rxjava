@@ -7,6 +7,7 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import com.okit.transaction.Attribute;
 import com.okit.transaction.LineItem;
@@ -131,6 +132,8 @@ public class TransactionTypeAdapter extends TypeAdapter<Transaction> {
 					case "type":
 						type = in.nextString();
 						break;	
+					default:
+						in.skipValue();
 				}
 			}
 			in.endObject();
@@ -147,7 +150,14 @@ public class TransactionTypeAdapter extends TypeAdapter<Transaction> {
 		LineItem li = new LineItem();
 		in.beginObject();
 		while (in.hasNext()) {
-			String s = in.nextName();
+			String s = null;
+			JsonToken jt = in.peek();
+			try {
+				s = in.nextName();
+			}
+			catch(Exception e) {
+				System.out.println("  E: "+ in.getPath() + "   ");				
+			}
 			switch (s) {
 				case "allowCampaigns":
 					li.setAllowCampaigns(in.nextString());
@@ -182,6 +192,11 @@ public class TransactionTypeAdapter extends TypeAdapter<Transaction> {
 				case "vat":
 					li.setVat(in.nextString());
 					break;
+				case "productCode":
+					li.setProductCode(in.nextString());
+					break;
+				default:
+					in.skipValue();
 			}
 		}
 		in.endObject();

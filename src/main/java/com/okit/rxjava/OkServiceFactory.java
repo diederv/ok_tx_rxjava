@@ -36,6 +36,7 @@ public class OkServiceFactory {
             	     .enableComplexMapKeySerialization()
             	     .serializeNulls()
             	     .setDateFormat(DateFormat.LONG)
+            	     .setLenient()
             	     .setPrettyPrinting()
             	     .setVersion(1.0)
             	     .create();
