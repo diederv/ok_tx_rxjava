@@ -4,7 +4,7 @@
 
   <groupId>com.okit</groupId>
   <artifactId>rxjava</artifactId>
-  <version>0.0.18</version>
+  <version>0.0.19</version>
   <packaging>jar</packaging>
 
   <name>rxjava</name>
@@ -106,7 +106,7 @@
 	<dependency>
 	    <groupId>com.github.diederv</groupId>
 	    <artifactId>ok_tx_model</artifactId>
-	    <version>0.0.7</version>
+	    <version>0.0.8</version>
 	</dependency>
 		
  	<dependency>
