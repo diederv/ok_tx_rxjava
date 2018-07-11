@@ -2,7 +2,6 @@ package com.okit.rxjava;
 
 
 import java.text.DateFormat;
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.okit.transaction.Transaction;
@@ -18,13 +17,13 @@ public class OkServiceFactory {
 
     private static OkService instance;
 
-    public static OkService getInstance(String baseUrl, String username) {
+    public static OkService getInstance(String baseUrl, String secretKey) {
         if (OkServiceFactory.instance == null) {
 
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
 
-            BasicAuthInterceptor authInterceptor = new BasicAuthInterceptor(username, "" );
+            BasicAuthInterceptor authInterceptor = new BasicAuthInterceptor(secretKey, "" );
 
             OkHttpClient okHttpclient = new OkHttpClient.Builder()
                     .addInterceptor(new RequestHeaderInterceptor())
@@ -37,7 +36,6 @@ public class OkServiceFactory {
             	     .enableComplexMapKeySerialization()
             	     .serializeNulls()
             	     .setDateFormat(DateFormat.LONG)
-            	     .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
             	     .setPrettyPrinting()
             	     .setVersion(1.0)
             	     .create();

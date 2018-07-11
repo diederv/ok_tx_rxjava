@@ -94,7 +94,19 @@ public class TransactionTypeAdapter extends TypeAdapter<Transaction> {
 	      		case "type":
 	      			tx.setType(in.nextString());
 	      			break;
-	      		default:
+	      		case "-xmlns:ns2":
+	      			tx.setXmlnsNs2(in.nextString());
+	      			break;
+	      		case "-xmlns:ns3":
+	      			tx.setXmlnsNs3(in.nextString());
+	      			break;
+	      		case "-xmlns:ns4":
+	      			tx.setXmlnsNs4(in.nextString());
+	      			break;
+	      		case "-xmlns:ns5":
+	      			tx.setXmlnsNs5(in.nextString());
+	      			break;	      			
+	      		default:  	      			
 	      			in.skipValue();
 	    	}
 	    }
@@ -106,21 +118,21 @@ public class TransactionTypeAdapter extends TypeAdapter<Transaction> {
 		String key = "", label = "", required = "", type = "";	
 			in.beginObject();
 			while (in.hasNext()) {
-			String s = in.nextName();
-			switch (s) {
-				case "key":
-					key = in.nextString();
-					break;
-				case "label":
-					label = in.nextString();
-					break;
-				case "required":
-					required = in.nextString();
-					break;
-				case "type":
-					type = in.nextString();
-					break;
-			}
+				String s = in.nextName();
+				switch (s) {
+					case "key":
+						key = in.nextString();
+						break;
+					case "label":
+						label = in.nextString();
+						break;
+					case "required":
+						required = in.nextString();
+						break;
+					case "type":
+						type = in.nextString();
+						break;	
+				}
 			}
 			in.endObject();
 			Attribute attr = new Attribute(key, label, required, type);
