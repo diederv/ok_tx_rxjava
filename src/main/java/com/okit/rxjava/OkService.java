@@ -1,9 +1,11 @@
 package com.okit.rxjava;
 
-import com.okit.transaction.TransactionInitiation;
+import com.okit.transaction.TransactionRequest;
 
 import io.reactivex.Observable;
 
+import com.okit.transaction.Authorisation;
+import com.okit.transaction.AuthorisationRequest;
 import com.okit.transaction.Transaction;
 
 import retrofit2.http.Body;
@@ -18,12 +20,24 @@ public interface OkService {
 	        "content-type: application/json",
 	})
 	@POST("/works/api/v2/payment/transactions.json")
-	abstract Observable<Transaction> initiateTransactionRx(@Body TransactionInitiation transactionInitiation);
+	abstract Observable<Transaction> requestTransactionRx(@Body TransactionRequest transactionInitiation);
     
     @Headers({
 	        "content-type: application/json",
 	})
 	@GET("/works/api/v2/payment/transactions/{guid}.json")
     abstract Observable<Transaction> checkTransactionRx(@Path("guid") String guid);
+
+    @Headers({
+        "content-type: application/json",
+	})
+	@POST("/works/api/v2/open/authorisationrequests.json")
+	abstract Observable<Authorisation> requestAuthorisation(@Body AuthorisationRequest authorisationRequest);
+	
+	@Headers({
+	        "content-type: application/json",
+	})
+	@GET("/works/api/v2/open/authorisationrequests/{guid}.json")
+	abstract Observable<Authorisation> checkAuthorisation(@Path("guid") String guid);
 
 }
