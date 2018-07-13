@@ -9,9 +9,9 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import com.okit.transaction.Attribute;
-import com.okit.transaction.LineItem;
-import com.okit.transaction.Transaction;
+import com.okit.client.Attribute;
+import com.okit.client.LineItem;
+import com.okit.client.Transaction;
 
 public class TransactionTypeAdapter extends TypeAdapter<Transaction> {
 	

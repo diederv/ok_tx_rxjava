@@ -1,12 +1,12 @@
 package com.okit.rxjava;
 
-import com.okit.transaction.TransactionRequest;
+import com.okit.client.TransactionRequest;
 
 import io.reactivex.Observable;
 
-import com.okit.transaction.Authorisation;
-import com.okit.transaction.AuthorisationRequest;
-import com.okit.transaction.Transaction;
+import com.okit.client.Authorisation;
+import com.okit.client.AuthorisationRequest;
+import com.okit.client.Transaction;
 
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -16,17 +16,21 @@ import retrofit2.http.Path;
 
 public interface OkService {
 
+	//-- Transaction 
+	
     @Headers({
 	        "content-type: application/json",
 	})
 	@POST("/works/api/v2/payment/transactions.json")
-	abstract Observable<Transaction> requestTransactionRx(@Body TransactionRequest transactionInitiation);
+	abstract Observable<Transaction> requestTransaction(@Body TransactionRequest transactionInitiation);
     
     @Headers({
 	        "content-type: application/json",
 	})
 	@GET("/works/api/v2/payment/transactions/{guid}.json")
-    abstract Observable<Transaction> checkTransactionRx(@Path("guid") String guid);
+    abstract Observable<Transaction> checkTransactionStatus(@Path("guid") String guid);
+    
+    // --- Authentication and Authorisation
 
     @Headers({
         "content-type: application/json",
@@ -38,6 +42,6 @@ public interface OkService {
 	        "content-type: application/json",
 	})
 	@GET("/works/api/v2/open/authorisationrequests/{guid}.json")
-	abstract Observable<Authorisation> checkAuthorisation(@Path("guid") String guid);
+	abstract Observable<Authorisation> checkAuthorisationStatus(@Path("guid") String guid);
 
 }
