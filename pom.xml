@@ -2,10 +2,10 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.okit</groupId>
-  <artifactId>rxjava</artifactId>
-  <version>0.2.5</version>
+  <artifactId>ok_tx_rxjava</artifactId>
+  <version>0.2.6</version>
   <packaging>jar</packaging>
-  <name>rxjava</name>
+  <name>ok_tx_rxjava</name>
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -90,7 +90,7 @@
 	<dependency>   
 	    <groupId>com.github.diederv</groupId>
 	    <artifactId>ok_tx_model</artifactId>
-	    <version>0.2.5</version>
+	    <version>0.2.6</version>
 	</dependency>			
   </dependencies>
 </project>
