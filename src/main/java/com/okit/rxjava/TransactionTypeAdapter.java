@@ -10,6 +10,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import com.okit.client.Attribute;
+import com.okit.client.Authorisation;
 import com.okit.client.LineItem;
 import com.okit.client.Transaction;
 

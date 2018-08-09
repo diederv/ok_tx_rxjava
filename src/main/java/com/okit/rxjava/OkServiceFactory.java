@@ -4,6 +4,7 @@ package com.okit.rxjava;
 import java.text.DateFormat;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.okit.client.Authorisation;
 import com.okit.client.Transaction;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -32,7 +33,8 @@ public class OkServiceFactory {
                     .build();
                         
             Gson gson = new GsonBuilder()
-            	     .registerTypeAdapter(Transaction.class, new TransactionTypeAdapter())            	     
+            	     .registerTypeAdapter(Transaction.class, new TransactionTypeAdapter())         
+            	     .registerTypeAdapter(Authorisation.class, new AuthorisationTypeAdapter())
             	     .enableComplexMapKeySerialization()
             	     .serializeNulls()
             	     .setDateFormat(DateFormat.LONG)

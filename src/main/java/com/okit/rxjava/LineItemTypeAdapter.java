@@ -7,7 +7,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.okit.client.LineItem;
 
-public class LineItemAdapter extends TypeAdapter<LineItem> {
+public class LineItemTypeAdapter extends TypeAdapter<LineItem> {
 
 	@Override
 	public void write(JsonWriter out, LineItem value) throws IOException {
