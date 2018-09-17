@@ -59,6 +59,24 @@ public class LineItemTypeAdapter extends TypeAdapter<LineItem> {
 		      	case "totalCurrency":
 		      		li.setTotalCurrency(in.nextString());
 		      		break;
+				case "allowCampaigns":
+					li.setAllowCampaigns(in.nextString());
+					break;
+				case "description":
+					li.setDescription(in.nextString());
+					break;
+				case "excludedFromCampaigns":
+					li.setExcludedFromCampaigns(in.nextString());
+					break;
+				case "externalId":
+					li.setExternalId(in.nextString());
+					break;
+				case "id":
+					li.setId(in.nextString());
+					break;
+				case "productCode":
+					li.setProductCode(in.nextString());
+					break;
 		      	default:
 		      		in.skipValue();
 			  }
