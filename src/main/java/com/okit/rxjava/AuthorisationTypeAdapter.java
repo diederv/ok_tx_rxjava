@@ -74,35 +74,38 @@ public class AuthorisationTypeAdapter extends TypeAdapter<Authorisation> {
 	}
 	
 	private void parseAttribute(JsonReader in, Authorisation a) throws IOException {				
-		String key = "", label = "", required = "", type = "";	
-			in.beginObject();
-			while (in.hasNext()) {
-				String s = in.nextName();
-				switch (s) {
-					case "key":
-						key = in.nextString();
-						break;
-					case "label":
-						label = in.nextString();
-						break;
-					case "required":
-						required = in.nextString();
-						break;
-					case "type":
-						type = in.nextString();
-						break;	
-					default:
-						in.skipValue();
-				}
+		String key = "", label = "", required = "", type = "", value = "";	
+		in.beginObject();
+		while (in.hasNext()) {
+			String s = in.nextName();
+			switch (s) {
+				case "key":
+					key = in.nextString();
+					break;
+				case "label":
+					label = in.nextString();
+					break;
+				case "required":
+					required = in.nextString();
+					break;
+				case "type":
+					type = in.nextString();
+					break;
+				case "value":
+					value = in.nextString();
+					break;					
+				default:
+					in.skipValue();
 			}
-			in.endObject();
-			Attribute attr = new Attribute(key, label, required, type);
-			List<Attribute> attributes = a.getAttributes();
-			if (attributes == null) {
-				attributes = new ArrayList<Attribute>();
-			}
-			attributes.add(attr);
-			a.setAttributes(attributes);
+		}
+		in.endObject();
+		Attribute attr = new Attribute(key, label, required, type, value);
+		List<Attribute> attributes = a.getAttributes();
+		if (attributes == null) {
+			attributes = new ArrayList<Attribute>();
+		}
+		attributes.add(attr);
+		a.setAttributes(attributes);
 	}
 
 }

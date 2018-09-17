@@ -1,10 +1,13 @@
 package com.okit.rxjava;
 
 
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.text.DateFormat;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.okit.client.Authorisation;
+import com.okit.client.LineItem;
 import com.okit.client.Transaction;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -22,7 +25,7 @@ public class OkServiceFactory {
         if (OkServiceFactory.instance == null) {
 
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
             BasicAuthInterceptor authInterceptor = new BasicAuthInterceptor(secretKey, "" );
 
@@ -30,11 +33,13 @@ public class OkServiceFactory {
                     .addInterceptor(new RequestHeaderInterceptor())
                     .addInterceptor(authInterceptor)
                     .addInterceptor(loggingInterceptor)
+//                    .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 8888)))
                     .build();
                         
             Gson gson = new GsonBuilder()
-            	     .registerTypeAdapter(Transaction.class, new TransactionTypeAdapter())         
-            	     .registerTypeAdapter(Authorisation.class, new AuthorisationTypeAdapter())
+            	     .registerTypeAdapter(Transaction.class, 	new TransactionTypeAdapter())         
+            	     .registerTypeAdapter(Authorisation.class, 	new AuthorisationTypeAdapter())
+//            	     .registerTypeAdapter(LineItem.class, 		new LineItemTypeAdapter())
             	     .enableComplexMapKeySerialization()
             	     .serializeNulls()
             	     .setDateFormat(DateFormat.LONG)

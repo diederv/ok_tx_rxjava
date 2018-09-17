@@ -11,7 +11,10 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import com.okit.client.Attribute;
 import com.okit.client.Authorisation;
+import com.okit.client.AuthorisationResult;
 import com.okit.client.LineItem;
+import com.okit.client.Location;
+import com.okit.client.PaymentTransaction;
 import com.okit.client.Transaction;
 
 public class TransactionTypeAdapter extends TypeAdapter<Transaction> {
@@ -19,7 +22,13 @@ public class TransactionTypeAdapter extends TypeAdapter<Transaction> {
 	private final static String BEGIN_OBJECT 	= "BEGIN_OBJECT";
 	private final static String BEGIN_ARRAY 	= "BEGIN_ARRAY";
 	
+	private final LineItemTypeAdapter lineItemTypeAdapter;
+	
 	private Gson gson = new Gson();
+	
+	public TransactionTypeAdapter() {
+		lineItemTypeAdapter = new LineItemTypeAdapter();
+	}
 	
 	@Override
 	public void write(JsonWriter out, Transaction value) throws IOException {
@@ -34,16 +43,16 @@ public class TransactionTypeAdapter extends TypeAdapter<Transaction> {
 	    	switch (in.nextName()) {
 	      		case "lineItems":
 	      			if (in.peek().name().equals(BEGIN_OBJECT)) {
-	      				parseLineItem(in, tx);				      			
+	      				//parseLineItem(in, tx);
+	      				tx.addLineItem(lineItemTypeAdapter.read(in));
 	      			} else if (in.peek().name().equals(BEGIN_ARRAY)) {
 	      				in.beginArray();
 	      				while(in.hasNext()) {
-	      					parseLineItem(in, tx);
+	      					//parseLineItem(in, tx);
+	      					tx.addLineItem(lineItemTypeAdapter.read(in));
 	      				}
 	      				in.endArray();
 	      			}
-	      			List<LineItem> l = new ArrayList<LineItem>();		      		
-	      			tx.setLineItems(l);
 	      			break;
 	      		case "attributes":			      			
 	      			if (in.peek().name().equals(BEGIN_OBJECT)) {
@@ -55,6 +64,20 @@ public class TransactionTypeAdapter extends TypeAdapter<Transaction> {
 	      				}
 	      				in.endArray();
 	      			}	      	
+	      			break;
+	      		case "paymentTransactions":	      			
+	      			if (in.peek().name().equals(BEGIN_OBJECT)) {
+	      				parsePaymentTransactions(in, tx);	      			
+	      			} else if (in.peek().name().equals(BEGIN_ARRAY)) {
+	      				in.beginArray();			      				
+	      				while(in.hasNext()) {
+	      					parsePaymentTransactions(in, tx);
+	      				}
+	      				in.endArray();
+	      			}
+	      			break;
+	      		case "authorisationResult":
+	      			parseAuthorisationResult(in, tx);
 	      			break;
 	      		case "account":
 	      			tx.setAccount(in.nextString());
@@ -70,6 +93,12 @@ public class TransactionTypeAdapter extends TypeAdapter<Transaction> {
 	      			break;
 	      		case "guid":
 	      			tx.setGuid(in.nextString());
+	      			break;
+	      		case "token":
+	      			tx.setToken(in.nextString());
+	      			break;
+	      		case "barcode":
+	      			tx.setBarcode(in.nextString());
 	      			break;
 	      		case "id":
 	      			tx.setId(in.nextString());
@@ -95,17 +124,14 @@ public class TransactionTypeAdapter extends TypeAdapter<Transaction> {
 	      		case "type":
 	      			tx.setType(in.nextString());
 	      			break;
-	      		case "-xmlns:ns2":
-	      			tx.setXmlnsNs2(in.nextString());
+	      		case "action":
+	      			tx.setAction(in.nextString());
+	      			break;	 
+	      		case "description":
+	      			tx.setDescription(in.nextString());
 	      			break;
-	      		case "-xmlns:ns3":
-	      			tx.setXmlnsNs3(in.nextString());
-	      			break;
-	      		case "-xmlns:ns4":
-	      			tx.setXmlnsNs4(in.nextString());
-	      			break;
-	      		case "-xmlns:ns5":
-	      			tx.setXmlnsNs5(in.nextString());
+	      		case "paymentMethod":
+	      			tx.setPaymentMethod(in.nextString());
 	      			break;	      			
 	      		default:  	      			
 	      			in.skipValue();
@@ -115,8 +141,106 @@ public class TransactionTypeAdapter extends TypeAdapter<Transaction> {
 		return tx;
 	}
 	
+	private void parseAuthorisationResult(JsonReader in, Transaction tx) throws IOException {
+		in.beginObject();
+		AuthorisationResult ar = new AuthorisationResult();
+		while (in.hasNext()) {
+			String s = in.nextName();
+			switch (s) {	
+				case "amount":
+					ar.setAmount(in.nextString());
+					break;
+				case "location":
+					parseLocation(in, ar);
+					break;
+				case "reference":
+					ar.setReference(in.nextString());
+					break;
+				case "result":
+					ar.setResult(in.nextString());
+					break;
+				case "timestamp":
+					ar.setTimestamp(in.nextString());
+					break;
+				default:
+					in.skipValue();
+			}
+		}
+		in.endObject();
+		tx.setAuthorisationResult(ar);
+	}
+	
+	private void parseLocation(JsonReader in, AuthorisationResult ar) throws IOException {
+		in.beginObject();
+		Location location = new Location();
+		while (in.hasNext()) {
+			String s = in.nextName();
+			switch (s) {	
+				case "lat":
+					location.setLat(in.nextString());
+					break;
+				case "lon":
+					location.setLon(in.nextString());
+					break;
+				default:
+					in.skipValue();
+			}
+		}
+		in.endObject();
+		ar.setLocation(location);
+	}
+
+	private void parsePaymentTransactions(JsonReader in, Transaction tx) throws IOException {
+		in.beginObject();
+		PaymentTransaction pTx = new PaymentTransaction();
+		while (in.hasNext()) {
+			String s = in.nextName();
+			switch (s) {	
+				case "@type":
+					pTx.setType(in.nextString());
+					break;
+				case "amount":
+					pTx.setAmount(in.nextString());
+					break;
+				case "externalId":
+					pTx.setExternalId(in.nextString());
+					break;
+				case "id":
+					pTx.setId(in.nextString());
+					break;
+				case "merchantAccountId":
+					pTx.setMerchantAccountId(in.nextString());
+					break;
+				case "method":
+					pTx.setMethod(in.nextString());
+					break;
+				case "reference":
+					pTx.setReference(in.nextString());
+					break;
+				case "state":
+					pTx.setState(in.nextString());
+					break;
+				case "timestamp":
+					pTx.setTimestamp(in.nextString());
+					break;
+				case "tokenId":
+					pTx.setTokenId(in.nextString());
+					break;
+				default:
+					in.skipValue();
+			}
+		}
+		in.endObject();
+		List<PaymentTransaction> paymentTransactions = tx.getPaymentTransactions();
+		if (paymentTransactions == null) {
+			paymentTransactions = new ArrayList<PaymentTransaction>();
+		}
+		paymentTransactions.add(pTx);
+		tx.setPaymentTransactions(paymentTransactions);
+	}
+	
 	private void parseAttribute(JsonReader in, Transaction tx) throws IOException {				
-		String key = "", label = "", required = "", type = "";	
+		String key = "", label = "", required = "", type = "", value = "";	
 			in.beginObject();
 			while (in.hasNext()) {
 				String s = in.nextName();
@@ -133,79 +257,20 @@ public class TransactionTypeAdapter extends TypeAdapter<Transaction> {
 					case "type":
 						type = in.nextString();
 						break;	
+					case "value":
+						value = in.nextString();
+						break;						
 					default:
 						in.skipValue();
 				}
 			}
 			in.endObject();
-			Attribute attr = new Attribute(key, label, required, type);
+			Attribute attr = new Attribute(key, label, required, type, value);
 			List<Attribute> attributes = tx.getAttributes();
 			if (attributes == null) {
 				attributes = new ArrayList<Attribute>();
 			}
 			attributes.add(attr);
 			tx.setAttributes(attributes);
-	}
-	
-	private void parseLineItem(JsonReader in, Transaction tx) throws IOException {
-		LineItem li = new LineItem();
-		in.beginObject();
-		while (in.hasNext()) {
-			String s = null;
-			JsonToken jt = in.peek();
-			try {
-				s = in.nextName();
-			}
-			catch(Exception e) {
-				System.out.println("  E: "+ in.getPath() + "   ");				
-			}
-			switch (s) {
-				case "allowCampaigns":
-					li.setAllowCampaigns(in.nextString());
-					break;
-				case "amount":
-					li.setAmount(in.nextString());
-					break;
-				case "currency":
-					li.setCurrency(in.nextString());
-					break;
-				case "description":
-					li.setDescription(in.nextString());
-					break;
-				case "excludedFromCampaigns":
-					li.setExcludedFromCampaigns(in.nextString());
-					break;
-				case "externalId":
-					li.setExternalId(in.nextString());
-					break;
-				case "id":
-					li.setId(in.nextString());
-					break;
-				case "quantity":
-					li.setQuantity(in.nextString());
-					break;
-				case "totalAmount":
-					li.setTotalAmount(in.nextString());
-					break;
-				case "totalCurrency":
-					li.setTotalCurrency(in.nextString());
-					break;
-				case "vat":
-					li.setVat(in.nextString());
-					break;
-				case "productCode":
-					li.setProductCode(in.nextString());
-					break;
-				default:
-					in.skipValue();
-			}
-		}
-		in.endObject();
-		List<LineItem> lineItems = tx.getLineItems();
-		if (lineItems == null) {
-			lineItems = new ArrayList<LineItem>();
-		}
-		lineItems.add(li);
-		tx.setLineItems(lineItems);
-	}
+	}	
 }

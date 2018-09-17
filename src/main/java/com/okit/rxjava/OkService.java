@@ -34,6 +34,13 @@ public interface OkService {
 	@GET("/works/api/v2/payment/transactions/{guid}.json")
     abstract Observable<Transaction> checkTransactionStatus(@Path("guid") String guid);
     
+    @Headers({
+        "content-type: application/json"
+    })
+    @GET("/works/api/v2/payment/transactions/{guid}/refunds")
+    abstract Observable<Transaction> refundTransaction(@Path("guid") String guid);    
+    
+    
     // --- Authentication and Authorisation
 
     @Headers({
