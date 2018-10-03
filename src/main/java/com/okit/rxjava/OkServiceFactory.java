@@ -1,18 +1,18 @@
 package com.okit.rxjava;
 
 
-import java.net.InetSocketAddress;
-import java.net.Proxy;
 import java.text.DateFormat;
+import java.util.concurrent.TimeUnit;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.okit.client.Authorisation;
-import com.okit.client.LineItem;
 import com.okit.client.Transaction;
+
 import okhttp3.OkHttpClient;
+import okhttp3.OkHttpClient.Builder;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -20,8 +20,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class OkServiceFactory {
 
     private static OkService instance;
+    
+    private final static String BASE_URL = "https://secure.okit.com";
 
-    public static OkService getInstance(String baseUrl, String secretKey) {
+    public static OkService getInstance(String secretKey) {
         if (OkServiceFactory.instance == null) {
 
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
@@ -29,17 +31,21 @@ public class OkServiceFactory {
 
             BasicAuthInterceptor authInterceptor = new BasicAuthInterceptor(secretKey, "" );
 
-            OkHttpClient okHttpclient = new OkHttpClient.Builder()
+            Builder builder = new OkHttpClient.Builder();
+            
+            // important for the ?sync=true calles:
+            builder.readTimeout(300, TimeUnit.SECONDS);
+            builder.writeTimeout(300, TimeUnit.SECONDS);
+            
+            OkHttpClient okHttpclient = builder
                     .addInterceptor(new RequestHeaderInterceptor())
                     .addInterceptor(authInterceptor)
-                    .addInterceptor(loggingInterceptor)
-//                    .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 8888)))
-                    .build();
+                    .addInterceptor(loggingInterceptor)                    
+                    .build();     
                         
             Gson gson = new GsonBuilder()
             	     .registerTypeAdapter(Transaction.class, 	new TransactionTypeAdapter())         
             	     .registerTypeAdapter(Authorisation.class, 	new AuthorisationTypeAdapter())
-//            	     .registerTypeAdapter(LineItem.class, 		new LineItemTypeAdapter())
             	     .enableComplexMapKeySerialization()
             	     .serializeNulls()
             	     .setDateFormat(DateFormat.LONG)
@@ -49,7 +55,7 @@ public class OkServiceFactory {
             	     .create();
             
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(baseUrl)
+                    .baseUrl(OkServiceFactory.BASE_URL)
                     .client(okHttpclient)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

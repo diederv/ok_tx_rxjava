@@ -10,7 +10,7 @@ public class RequestHeaderInterceptor implements Interceptor {
     
     public Response intercept(Interceptor.Chain chain) throws IOException {
         final Request.Builder builder = chain.request().newBuilder();
-        builder.addHeader("headerKey","value");
+        builder.addHeader("content-type", "application/json");
         return chain.proceed(builder.build());
     }
 }
